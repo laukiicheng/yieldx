@@ -23,6 +23,14 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("io.github.microutils:kotlin-logging:1.12.0")
+
+    // https://www.baeldung.com/opencsv
+//    implementation("com.opencsv:opencsv:5.5.1")
+
+    // https://github.com/FasterXML/jackson-dataformats-text
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.12.2")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
