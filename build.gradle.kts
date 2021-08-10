@@ -32,6 +32,9 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.12.2")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("io.mockk:mockk:1.12.0")
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:4.6.1")
+    testImplementation("io.kotest:kotest-property:4.6.1")
 }
 
 tasks.withType<KotlinCompile> {
