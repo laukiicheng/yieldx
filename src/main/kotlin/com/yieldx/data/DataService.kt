@@ -51,5 +51,5 @@ class DataService(
 // TODO: This is some dummy class
 data class Finance(
     val name: String,
-    val number: String
+    val number: Int
 )
