@@ -1,15 +1,18 @@
 package com.yieldx.controllers
 
+import com.yieldx.data.DataService
+import com.yieldx.data.Finance
 import mu.KotlinLogging
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 
 private val logger = KotlinLogging.logger {}
 
 @RestController
 @RequestMapping("example")
-class ExampleController {
+class ExampleController(private val dataService: DataService) {
 
     @GetMapping("/{id}")
     fun get(@PathVariable id: String): ResponseEntity<Example> {
@@ -55,6 +58,24 @@ class ExampleController {
         }
 
         return ResponseEntity.ok(example)
+    }
+
+    @GetMapping("/finance")
+    fun getFinanceFromFile(): ResponseEntity<List<Finance>> {
+        val finance = dataService.getDataFromCsvFile()
+        return ResponseEntity.ok(finance)
+    }
+
+    @PostMapping("multiPartFile")
+    fun multiPartFileExample(
+        @RequestParam(required = false) file: MultipartFile?
+    ): ResponseEntity<String> {
+        if (file == null) {
+            return ResponseEntity.badRequest().body("File must not be null")
+        }
+
+        val fileContent = dataService.getDataFromMultiPartFile(file)
+        return ResponseEntity.ok(fileContent)
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
