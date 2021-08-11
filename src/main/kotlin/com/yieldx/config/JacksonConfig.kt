@@ -17,8 +17,14 @@ class JacksonConfig {
     @Bean
     fun objectMapper(): ObjectMapper =
         Jackson2ObjectMapperBuilder.json()
-            .featuresToEnable(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, JsonParser.Feature.STRICT_DUPLICATE_DETECTION)
-            .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .featuresToEnable(
+                MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES,
+                JsonParser.Feature.STRICT_DUPLICATE_DETECTION
+            )
+            .featuresToDisable(
+                SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,
+                DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
+            )
             .build<ObjectMapper>()
             .registerKotlinModule()
             .registerModules(JavaTimeModule())

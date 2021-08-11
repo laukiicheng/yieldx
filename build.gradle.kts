@@ -28,6 +28,7 @@ dependencies {
     // https://www.baeldung.com/opencsv
 //    implementation("com.opencsv:opencsv:5.5.1")
 
+    // https://nick-tomlin.com/posts/using-jackson-csv-with-kotlin
     // https://github.com/FasterXML/jackson-dataformats-text
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.12.2")
 
