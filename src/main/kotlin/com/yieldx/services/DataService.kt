@@ -1,8 +1,9 @@
-package com.yieldx.data
+package com.yieldx.services
 
 import com.fasterxml.jackson.databind.MappingIterator
 import com.fasterxml.jackson.dataformat.csv.CsvMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.yieldx.models.Finance
 import mu.KotlinLogging
 import org.springframework.core.io.ResourceLoader
 import org.springframework.stereotype.Component
@@ -53,8 +54,3 @@ class DataService(private val resourceLoader: ResourceLoader) {
     }
 }
 
-// TODO: This is some dummy class
-data class Finance(
-    val name: String,
-    val number: Int
-)

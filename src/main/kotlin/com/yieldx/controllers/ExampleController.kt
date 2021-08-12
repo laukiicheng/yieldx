@@ -1,7 +1,10 @@
 package com.yieldx.controllers
 
-import com.yieldx.data.DataService
-import com.yieldx.data.Finance
+import com.yieldx.services.DataService
+import com.yieldx.models.Finance
+import com.yieldx.exceptions.InvalidExampleNameException
+import com.yieldx.exceptions.MultiFileNullException
+import com.yieldx.models.Example
 import mu.KotlinLogging
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -102,9 +105,3 @@ class ExampleController(private val dataService: DataService) {
         return ResponseEntity.badRequest().body(multiFileNullException.message)
     }
 }
-
-data class Example(val name: String)
-
-class InvalidExampleNameException(message: String) : RuntimeException(message)
-
-class MultiFileNullException(message: String) : RuntimeException(message)
