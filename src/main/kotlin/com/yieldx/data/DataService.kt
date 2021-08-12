@@ -15,21 +15,21 @@ class DataService(private val resourceLoader: ResourceLoader) {
     private val logger = KotlinLogging.logger {}
 
     fun getDataFromCsvFile(fileName: String = "exampleData.csv"): List<Finance> {
-        logger.info {
-            """
-            Retrieving file $fileName from resources folder
-            """.trimIndent()
-        }
+        logger.info { "Retrieving file $fileName from resources folder" }
 
         val resource = resourceLoader.getResource("classpath:data/$fileName")
         return getObjectsFromCsv(resource.inputStream)
     }
 
     fun getFinanceFromMultiPartFile(file: MultipartFile): List<Finance> {
+        logger.info { "Retrieving list of ${Finance::class.simpleName} from ${MultipartFile::class.simpleName} ${file.name}" }
+
         return getObjectsFromCsv(file.inputStream)
     }
 
     fun getDataFromMultiPartFile(file: MultipartFile): String {
+        logger.info { "Retrieving content as string from ${MultipartFile::class.simpleName} from ${file.name}" }
+
         return String(file.bytes)
     }
 

@@ -103,9 +103,7 @@ class ExampleController(private val dataService: DataService) {
     }
 }
 
-data class Example(
-    val name: String
-)
+data class Example(val name: String)
 
 class InvalidExampleNameException(message: String) : RuntimeException(message)
 
