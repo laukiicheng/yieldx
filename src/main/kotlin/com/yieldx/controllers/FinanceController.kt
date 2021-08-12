@@ -21,7 +21,7 @@ class FinanceController(private val dataService: DataService) {
         return ResponseEntity.ok(finance)
     }
 
-    @PostMapping("multiPartFile")
+    @PostMapping("file")
     fun multiPartFileExample(@RequestParam(required = false) file: MultipartFile?): ResponseEntity<String> {
         if (file == null) {
             throw MultiFileNullException("file must not be null")
@@ -31,7 +31,7 @@ class FinanceController(private val dataService: DataService) {
         return ResponseEntity.ok(fileContent)
     }
 
-    @PostMapping("finance/multiPartFile")
+    @PostMapping("multiPartFile")
     fun getFinanceFromFile(@RequestParam(required = false) file: MultipartFile?): ResponseEntity<List<Finance>> {
         if (file == null) {
             throw MultiFileNullException("file must not be null")

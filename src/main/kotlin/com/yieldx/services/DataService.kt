@@ -1,6 +1,8 @@
 package com.yieldx.services
 
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.MappingIterator
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.csv.CsvMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.yieldx.models.Finance
@@ -11,7 +13,10 @@ import org.springframework.web.multipart.MultipartFile
 import java.io.InputStream
 
 @Component
-class DataService(private val resourceLoader: ResourceLoader) {
+class DataService(
+    private val objectMapper: ObjectMapper,
+    private val resourceLoader: ResourceLoader
+) {
 
     private val logger = KotlinLogging.logger {}
 
@@ -34,6 +39,10 @@ class DataService(private val resourceLoader: ResourceLoader) {
         return String(file.bytes)
     }
 
+    private inline fun <reified T> getObjectsFromJson(json: String): List<T> {
+        return objectMapper.readValue(json, object : TypeReference<List<T>>() {})
+    }
+
     private inline fun <reified T> getObjectsFromCsv(inputStream: InputStream): List<T> {
         inputStream.use {
             val mapper = CsvMapper()
@@ -53,4 +62,3 @@ class DataService(private val resourceLoader: ResourceLoader) {
         }
     }
 }
-
