@@ -1,21 +1,17 @@
 package com.yieldx.controllers
 
-import com.yieldx.services.DataService
-import com.yieldx.models.Finance
 import com.yieldx.exceptions.InvalidExampleNameException
-import com.yieldx.exceptions.MultiFileNullException
 import com.yieldx.models.Example
 import mu.KotlinLogging
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.multipart.MultipartFile
 
 private val logger = KotlinLogging.logger {}
 
 @RestController
 @RequestMapping("example")
-class ExampleController(private val dataService: DataService) {
+class ExampleController {
 
     @GetMapping("/{id}")
     fun get(@PathVariable id: String): ResponseEntity<Example> {
@@ -63,45 +59,9 @@ class ExampleController(private val dataService: DataService) {
         return ResponseEntity.ok(example)
     }
 
-    @GetMapping("/finance")
-    fun getFinanceFromFile(): ResponseEntity<List<Finance>> {
-        val finance = dataService.getDataFromCsvFile()
-        return ResponseEntity.ok(finance)
-    }
-
-    @PostMapping("multiPartFile")
-    fun multiPartFileExample(
-        @RequestParam(required = false) file: MultipartFile?
-    ): ResponseEntity<String> {
-        if (file == null) {
-            throw MultiFileNullException("file must not be null")
-        }
-
-        val fileContent = dataService.getDataFromMultiPartFile(file)
-        return ResponseEntity.ok(fileContent)
-    }
-
-    @PostMapping("finance/multiPartFile")
-    fun getFinanceFromFile(
-        @RequestParam(required = false) file: MultipartFile?
-    ): ResponseEntity<List<Finance>> {
-        if (file == null) {
-            throw MultiFileNullException("file must not be null")
-        }
-
-        val fileContent = dataService.getFinanceFromMultiPartFile(file)
-        return ResponseEntity.ok(fileContent)
-    }
-
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidExampleNameException::class)
     fun handleException(invalidExampleNameException: InvalidExampleNameException): ResponseEntity<String> {
         return ResponseEntity.badRequest().body(invalidExampleNameException.message)
-    }
-
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MultiFileNullException::class)
-    fun handleException(multiFileNullException: MultiFileNullException): ResponseEntity<String> {
-        return ResponseEntity.badRequest().body(multiFileNullException.message)
     }
 }
