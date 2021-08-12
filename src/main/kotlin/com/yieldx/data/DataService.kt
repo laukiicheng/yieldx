@@ -1,19 +1,16 @@
 package com.yieldx.data
 
 import com.fasterxml.jackson.databind.MappingIterator
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.csv.CsvMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import mu.KotlinLogging
 import org.springframework.core.io.ResourceLoader
 import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartFile
+import java.io.InputStream
 
 @Component
-class DataService(
-    private val objectMapper: ObjectMapper,
-    private val resourceLoader: ResourceLoader
-) {
+class DataService(private val resourceLoader: ResourceLoader) {
 
     private val logger = KotlinLogging.logger {}
 
@@ -25,42 +22,31 @@ class DataService(
         }
 
         val resource = resourceLoader.getResource("classpath:data/$fileName")
-        resource.inputStream.use { inputStream ->
-            val mapper = CsvMapper()
-            mapper.registerKotlinModule()
+        return getObjectsFromCsv(resource.inputStream)
+    }
 
-            val schema = mapper
-                .schemaFor(Finance::class.java)
-                .withHeader()
-
-            val objectReader = mapper
-                .readerFor(Finance::class.java)
-                .with(schema)
-
-            val iterator: MappingIterator<Finance> = objectReader.readValues(inputStream)
-
-            return iterator.readAll()
-        }
+    fun getFinanceFromMultiPartFile(file: MultipartFile): List<Finance> {
+        return getObjectsFromCsv(file.inputStream)
     }
 
     fun getDataFromMultiPartFile(file: MultipartFile): String {
         return String(file.bytes)
     }
 
-    fun getFinanceFromMultiPartFile(file: MultipartFile): List<Finance> {
-        file.inputStream.use { inputStream ->
+    private inline fun <reified T> getObjectsFromCsv(inputStream: InputStream): List<T> {
+        inputStream.use {
             val mapper = CsvMapper()
             mapper.registerKotlinModule()
 
             val schema = mapper
-                .schemaFor(Finance::class.java)
+                .schemaFor(T::class.java)
                 .withHeader()
 
             val objectReader = mapper
-                .readerFor(Finance::class.java)
+                .readerFor(T::class.java)
                 .with(schema)
 
-            val iterator: MappingIterator<Finance> = objectReader.readValues(inputStream)
+            val iterator: MappingIterator<T> = objectReader.readValues(it)
 
             return iterator.readAll()
         }
