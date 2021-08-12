@@ -1,6 +1,5 @@
 package com.yieldx.data
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.kotest.matchers.shouldBe
 import io.kotest.provided.BaseStringSpec
 import io.mockk.every
@@ -23,8 +22,8 @@ internal class DataServiceTest : BaseStringSpec() {
         val resourceLoader = mockk<ResourceLoader> {
             every { getResource(any()) } returns resource
         }
-        val objectMapper = mockk<ObjectMapper>()
-        val service = DataService(objectMapper, resourceLoader)
+//        val objectMapper = mockk<ObjectMapper>()
+        val service = DataService(resourceLoader)
 
         "getDataFromCsvFile should return list of ${Finance::class.simpleName}" {
             val financeList = service.getDataFromCsvFile("")
