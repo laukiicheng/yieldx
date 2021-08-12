@@ -71,10 +71,22 @@ class ExampleController(private val dataService: DataService) {
         @RequestParam(required = false) file: MultipartFile?
     ): ResponseEntity<String> {
         if (file == null) {
-            return ResponseEntity.badRequest().body("File must not be null")
+            throw MultiFileNullException("file must not be null")
         }
 
         val fileContent = dataService.getDataFromMultiPartFile(file)
+        return ResponseEntity.ok(fileContent)
+    }
+
+    @PostMapping("finance/multiPartFile")
+    fun getFinanceFromFile(
+        @RequestParam(required = false) file: MultipartFile?
+    ): ResponseEntity<List<Finance>> {
+        if (file == null) {
+            throw MultiFileNullException("file must not be null")
+        }
+
+        val fileContent = dataService.getFinanceFromMultiPartFile(file)
         return ResponseEntity.ok(fileContent)
     }
 
@@ -83,6 +95,12 @@ class ExampleController(private val dataService: DataService) {
     fun handleException(invalidExampleNameException: InvalidExampleNameException): ResponseEntity<String> {
         return ResponseEntity.badRequest().body(invalidExampleNameException.message)
     }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MultiFileNullException::class)
+    fun handleException(multiFileNullException: MultiFileNullException): ResponseEntity<String> {
+        return ResponseEntity.badRequest().body(multiFileNullException.message)
+    }
 }
 
 data class Example(
@@ -90,3 +108,5 @@ data class Example(
 )
 
 class InvalidExampleNameException(message: String) : RuntimeException(message)
+
+class MultiFileNullException(message: String) : RuntimeException(message)

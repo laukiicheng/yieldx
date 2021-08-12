@@ -46,6 +46,25 @@ class DataService(
     fun getDataFromMultiPartFile(file: MultipartFile): String {
         return String(file.bytes)
     }
+
+    fun getFinanceFromMultiPartFile(file: MultipartFile): List<Finance> {
+        file.inputStream.use { inputStream ->
+            val mapper = CsvMapper()
+            mapper.registerKotlinModule()
+
+            val schema = mapper
+                .schemaFor(Finance::class.java)
+                .withHeader()
+
+            val objectReader = mapper
+                .readerFor(Finance::class.java)
+                .with(schema)
+
+            val iterator: MappingIterator<Finance> = objectReader.readValues(inputStream)
+
+            return iterator.readAll()
+        }
+    }
 }
 
 // TODO: This is some dummy class
