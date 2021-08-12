@@ -25,12 +25,13 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.github.microutils:kotlin-logging:1.12.0")
 
-    // https://www.baeldung.com/opencsv
-//    implementation("com.opencsv:opencsv:5.5.1")
-
     // https://nick-tomlin.com/posts/using-jackson-csv-with-kotlin
     // https://github.com/FasterXML/jackson-dataformats-text
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.12.2")
+
+    // https://github.com/FasterXML/jackson-dataformat-xml
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.12.3")
+    implementation("com.fasterxml.woodstox:woodstox-core:6.2.5")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.mockk:mockk:1.12.0")

@@ -1,8 +1,7 @@
 package com.yieldx.data
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.yieldx.models.Finance
-import com.yieldx.services.DataService
+import com.yieldx.services.CsvService
 import io.kotest.matchers.shouldBe
 import io.kotest.provided.BaseStringSpec
 import io.mockk.every
@@ -10,7 +9,7 @@ import io.mockk.mockk
 import org.springframework.core.io.Resource
 import org.springframework.core.io.ResourceLoader
 
-internal class DataServiceTest : BaseStringSpec() {
+internal class CsvServiceTest : BaseStringSpec() {
     init {
         val fileContents =
             """
@@ -25,11 +24,10 @@ internal class DataServiceTest : BaseStringSpec() {
         val resourceLoader = mockk<ResourceLoader> {
             every { getResource(any()) } returns resource
         }
-        val objectMapper = mockk<ObjectMapper>()
-        val service = DataService(objectMapper, resourceLoader)
+        val service = CsvService(resourceLoader)
 
         "getDataFromCsvFile should return list of ${Finance::class.simpleName}" {
-            val financeList = service.getDataFromCsvFile("")
+            val financeList = service.getFinancesFromResourceFile("")
 
             financeList.size shouldBe 2
         }
